@@ -17,11 +17,7 @@ try{
     }
     if(!Array.isArray(req.files.photos))photos.push(req.files.photos)
     else photos = req.files.photos
-    // checking if any of the file is undefined or not
-    if(!name || !price || !description || !photos || !category || !brand){
-        return next(new customError("All fields of a Product are required", 400));
-    }
-   
+  
     // uploading given photos of the product and saving their public_id and secure_url in photos array which will be passed while creating new Product
     for(let i = 0;i < photos.length;i++){
        const uploadedPhoto = await cloudinary.v2.uploader.upload(photos[i].tempFilePath,{
@@ -33,7 +29,7 @@ try{
         }
         
     }
-    
+
     req.body.user = req.user;
     // adding the product to the database
     const product = await Product.create(req.body);
